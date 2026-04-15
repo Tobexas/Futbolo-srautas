@@ -3,34 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <title>Futbolo srautas</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .team {
+      margin-bottom: 40px;
+    }
+
+    .team h2 {
+      background: #222;
+      color: white;
+      padding: 10px;
+    }
+
+    .player {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .green { color: green; font-weight: bold; }
+    .red { color: red; font-weight: bold; }
+  </style>
 </head>
 <body>
 
-<h1>Top lygos komandų sudėčių pokyčiai</h1>
+<h1>Komandų sudėtys</h1>
 
-<table border="1" id="table"></table>
+<div id="content"></div>
 
 <script>
 const sheetID = "1-3MEUf3YVkoEEST6N4KtFCCdaDxCYt4yevytt-rKRW4";
-const url = `https://opensheet.elk.sh/${sheetID}/test`;
+const url = `https://opensheet.elk.sh/${sheetID}/TEST`;
 
 fetch(url)
   .then(res => res.json())
   .then(data => {
-    let table = document.getElementById("table");
 
-    let headers = Object.keys(data[0]);
-    let headerRow = "<tr>";
-    headers.forEach(h => headerRow += `<th>${h}</th>`);
-    headerRow += "</tr>";
-    table.innerHTML += headerRow;
+    let content = document.getElementById("content");
+
+    // grupuojam pagal komandą
+    let teams = {};
 
     data.forEach(row => {
-      let rowHTML = "<tr>";
-      headers.forEach(h => rowHTML += `<td>${row[h]}</td>`);
-      rowHTML += "</tr>";
-      table.innerHTML += rowHTML;
+      let team = row["Komanda"];
+
+      if (!teams[team]) {
+        teams[team] = [];
+      }
+
+      teams[team].push(row);
     });
+
+    // renderinam
+    for (let team in teams) {
+      let teamDiv = document.createElement("div");
+      teamDiv.className = "team";
+
+      let title = document.createElement("h2");
+      title.innerText = team;
+
+      teamDiv.appendChild(title);
+
+      teams[team].forEach(player => {
+        let div = document.createElement("div");
+        div.className = "player";
+
+        let statusClass = "";
+        if (player["Statusas"] === "Atėjo") statusClass = "yellow";
+        if (player["Statusas"] === "Pratęsta") statusClass = "green";
+        if (player["Statusas"] === "Išnuomotas") statusClass = "red";
+
+        div.innerHTML = `
+          <b>${player["Pozicija"]}</b> 
+          ${player["Žaidėjas"]} 
+          <span class="${statusClass}">${player["Statusas"]}</span>
+          (${player["Iki"] || ""})
+        `;
+
+        teamDiv.appendChild(div);
+      });
+
+      content.appendChild(teamDiv);
+    }
+
   });
 </script>
 
