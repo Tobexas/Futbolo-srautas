@@ -12,21 +12,19 @@
 
 <script>
 const sheetID = "1-3MEUf3YVkoEEST6N4KtFCCdaDxCYt4yevytt-rKRW4";
-const url = `https://docs.google.com/spreadsheets/d/1-3MEUf3YVkoEEST6N4KtFCCdaDxCYt4yevytt-rKRW4/${sheetID}/2026`;
+const url = `https://opensheet.elk.sh/${sheetID}/2026`;
 
 fetch(url)
   .then(res => res.json())
   .then(data => {
     let table = document.getElementById("table");
 
-    // header
     let headers = Object.keys(data[0]);
     let headerRow = "<tr>";
     headers.forEach(h => headerRow += `<th>${h}</th>`);
     headerRow += "</tr>";
     table.innerHTML += headerRow;
 
-    // rows
     data.forEach(row => {
       let rowHTML = "<tr>";
       headers.forEach(h => rowHTML += `<td>${row[h]}</td>`);
