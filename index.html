@@ -7,7 +7,14 @@
   <style>
     body {
       font-family: Arial;
-      margin: 20px;
+      margin: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 0;
     }
 
     h1 {
@@ -25,23 +32,34 @@
     }
 
     .player {
-  display: grid;
-  grid-template-columns: 60px 1fr 120px 80px;
-  gap: 10px;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-  align-items: center;
+      display: grid;
+      grid-template-columns: 60px 1fr 120px 80px;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      align-items: center;
+    }
+
+    /* mobile fix */
+    @media (max-width: 600px) {
+      .player {
+        grid-template-columns: 40px 1fr;
+        gap: 5px;
+      }
     }
 
     .green { color: green; font-weight: bold; }
     .red { color: red; font-weight: bold; }
+    .yellow { color: orange; font-weight: bold; }
+
   </style>
 </head>
 <body>
 
-<h1>Komandų sudėtys</h1>
-
-<div id="content"></div>
+<div class="container">
+  <h1>Komandų sudėtys</h1>
+  <div id="content"></div>
+</div>
 
 <script>
 const sheetID = "1-3MEUf3YVkoEEST6N4KtFCCdaDxCYt4yevytt-rKRW4";
@@ -53,7 +71,6 @@ fetch(url)
 
     let content = document.getElementById("content");
 
-    // grupuojam pagal komandą
     let teams = {};
 
     data.forEach(row => {
@@ -66,7 +83,6 @@ fetch(url)
       teams[team].push(row);
     });
 
-    // renderinam
     for (let team in teams) {
       let teamDiv = document.createElement("div");
       teamDiv.className = "team";
@@ -86,10 +102,10 @@ fetch(url)
         if (player["Statusas"] === "Išnuomotas") statusClass = "red";
 
         div.innerHTML = `
-          <b>${player["Pozicija"]}</b> 
-          ${player["Žaidėjas"]} 
-          <span class="${statusClass}">${player["Statusas"]}</span>
-          (${player["Iki"] || ""})
+          <div><b>${player["Pozicija"]}</b></div>
+          <div>${player["Žaidėjas"]}</div>
+          <div class="${statusClass}">${player["Statusas"]}</div>
+          <div>${player["Iki"] || ""}</div>
         `;
 
         teamDiv.appendChild(div);
