@@ -12,6 +12,9 @@
     .trn {
        background-color: #fff9c4;
     }
+    .Išnuomotas {
+       background-color: #c0c0c0;
+    }
     .container {
       width: 90%;
       max-width: 900px;
@@ -100,6 +103,9 @@ div.className = "player";
 
 if (player["Pozicija"] === "Trn") {
   div.classList.add("trn");
+
+if (player["Statusas"] === "Išnuomotas") {
+div.classList.add("Išnuomotas");
 }
 
         let statusClass = "";
