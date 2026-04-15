@@ -1,38 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Futbolo srautas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futbolo srautas (svetainė kuriama)</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            margin: 0;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-
-<h1>Top lygos komandų sudėčių pokyčiai</h1>
-
-<table border="1" id="table"></table>
-
-<script>
-const sheetID = "1-3MEUf3YVkoEEST6N4KtFCCdaDxCYt4yevytt-rKRW4";
-const url = `https://opensheet.elk.sh/${sheetID}/2026`;
-
-fetch(url)
-  .then(res => res.json())
-  .then(data => {
-    let table = document.getElementById("table");
-
-    let headers = Object.keys(data[0]);
-    let headerRow = "<tr>";
-    headers.forEach(h => headerRow += `<th>${h}</th>`);
-    headerRow += "</tr>";
-    table.innerHTML += headerRow;
-
-    data.forEach(row => {
-      let rowHTML = "<tr>";
-      headers.forEach(h => rowHTML += `<td>${row[h]}</td>`);
-      rowHTML += "</tr>";
-      table.innerHTML += rowHTML;
-    });
-  });
-</script>
-
+    <div class="header">
+        <img src="https://iili.io/BOA1EmB.jpg" alt="Futbolo srautas Logo" class="logo">
+            </div>
+    
+    <iframe src="https://docs.google.com/document/d/e/2PACX-1vSdblocLV2bZnhPz9KF9AynZxHLaFqOkvLbGpwcmxdvbnF3zapQKQNwi2cFtwv_trzYRflKMa3LyOfx/pub" width="700px" height="10500px"></iframe>
 </body>
 </html>
