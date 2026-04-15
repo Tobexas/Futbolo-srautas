@@ -9,7 +9,9 @@
       font-family: Arial;
       margin: 0;
     }
-
+    .trn {
+       background-color: #fff9c4;
+    }
     .container {
       width: 90%;
       max-width: 900px;
@@ -94,7 +96,11 @@ fetch(url)
 
       teams[team].forEach(player => {
         let div = document.createElement("div");
-        div.className = "player";
+div.className = "player";
+
+if (player["Pozicija"] === "Trn") {
+  div.classList.add("trn");
+}
 
         let statusClass = "";
         if (player["Statusas"] === "Atėjo") statusClass = "yellow";
