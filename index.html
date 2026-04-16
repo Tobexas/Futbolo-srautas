@@ -103,9 +103,9 @@ if (player["Pozicija"] === "Trn") {
 }
 
         let statusClass = "";
-        if (player["Statusas"] === "Atėjo") statusClass = "yellow";
-        if (player["Statusas"] === "Pratęsta") statusClass = "green";
-        if (player["Statusas"] === "Išnuomotas") statusClass = "red";
+        if (player["Statusas"] === "Pasirašė") statusClass = "green";
+        if (player["Statusas"] === "Paliko") statusClass = "red";
+        if (player["Statusas"] === "Pratęsta") statusClass = "blue";
 
         div.innerHTML = `
           <div><b>${player["Pozicija"]}</b></div>
