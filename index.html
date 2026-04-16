@@ -114,7 +114,37 @@ fetch(url)
       title.innerText = team;
 
       teamDiv.appendChild(title);
+  
+      teams[team].sort((a, b) => {
 
+  let posA = (a["Pozicija"] || "").trim();
+  let posB = (b["Pozicija"] || "").trim();
+
+  let statusA = (a["Statusas"] || "").trim();
+  let statusB = (b["Statusas"] || "").trim();
+
+  // STATUSO PRIORITETAS (didžiausias svoris)
+  const statusOrder = {
+    "Paliko": 100,
+    "Išnuomotas": 90
+  };
+
+  let statusDiff = (statusOrder[statusA] || 0) - (statusOrder[statusB] || 0);
+  if (statusDiff !== 0) return statusDiff;
+
+  // POZICIJOS LOGIKA
+  function getPosOrder(pos) {
+    if (pos === "GK") return 1;
+    if (pos.startsWith("D")) return 2;
+    if (pos.startsWith("M")) return 3;
+    if (pos.startsWith("A")) return 4;
+    if (pos === "ST") return 5;
+    if (pos === "Trn") return 6;
+    return 99;
+  }
+
+  return getPosOrder(posA) - getPosOrder(posB);
+});
       teams[team].forEach(player => {
         let div = document.createElement("div");
         div.className = "player";
