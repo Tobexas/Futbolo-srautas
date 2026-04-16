@@ -77,6 +77,15 @@
     .player:hover {
       filter: brightness(0.98);
     }
+    .header-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px 80px;
+  gap: 10px;
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+  padding: 6px 0;
+  margin-bottom: 5px;
+}
 
   </style>
 </head>
@@ -118,6 +127,17 @@ fetch(url)
       title.innerText = team;
 
       teamDiv.appendChild(title);
+      let header = document.createElement("div");
+header.className = "header-row";
+
+header.innerHTML = `
+  <div>Poz</div>
+  <div>Žaidėjas</div>
+  <div>Statusas</div>
+  <div>Iki</div>
+`;
+
+teamDiv.appendChild(header);
   
       teams[team].sort((a, b) => {
 
