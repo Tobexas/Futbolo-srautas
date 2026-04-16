@@ -9,9 +9,7 @@
       font-family: Arial;
       margin: 0;
     }
-    .trn {
-       background-color: #fff9c4;
-    }
+
     .container {
       width: 90%;
       max-width: 900px;
@@ -42,7 +40,6 @@
       align-items: center;
     }
 
-    /* mobile fix */
     @media (max-width: 600px) {
       .player {
         grid-template-columns: 40px 1fr;
@@ -50,25 +47,32 @@
       }
     }
 
-    .green { color: green; font-weight: bold; }
-    .red { color: red; font-weight: bold; }
-    .yellow { color: orange; font-weight: bold; }
-  
+    /* Pozicija */
+    .trn {
+      background-color: #fff9c4;
+    }
+
+    /* Statusai */
     .loan {
-  background-color: #f2f2f2; /* light grey */
-}
+      background-color: #f2f2f2;
+    }
 
-.left {
-  background-color: #ffe5e5; /* light red */
-}
+    .left {
+      background-color: #ffe5e5;
+    }
 
-.extended {
-  background-color: #fff9c4; /* light yellow */
-}
+    .extended {
+      background-color: #fff9c4;
+    }
 
-.signed {
-  background-color: #e6ffe6; /* light green */
-}
+    .signed {
+      background-color: #e6ffe6;
+    }
+
+    /* Hover */
+    .player:hover {
+      filter: brightness(0.98);
+    }
 
   </style>
 </head>
@@ -88,9 +92,9 @@ fetch(url)
   .then(data => {
 
     let content = document.getElementById("content");
-
     let teams = {};
 
+    // Grupavimas pagal komandą
     data.forEach(row => {
       let team = row["Komanda"];
 
@@ -101,6 +105,7 @@ fetch(url)
       teams[team].push(row);
     });
 
+    // Renderinimas
     for (let team in teams) {
       let teamDiv = document.createElement("div");
       teamDiv.className = "team";
@@ -112,32 +117,26 @@ fetch(url)
 
       teams[team].forEach(player => {
         let div = document.createElement("div");
-div.className = "player";
+        div.className = "player";
 
-if (player["Pozicija"] === "Trn") {
-  div.classList.add("trn");
-}
+        // Pozicija (Trn)
+        if (player["Pozicija"]?.trim() === "Trn") {
+          div.classList.add("trn");
+        }
 
-        let div = document.createElement("div");
-div.className = "player";
+        // Statusas
+        let status = player["Statusas"]?.trim();
 
-if (player["Statusas"] === "Išnuomotas") {
-  div.classList.add("loan");
-}
-if (player["Statusas"] === "Paliko") {
-  div.classList.add("left");
-}
-if (player["Statusas"] === "Pratęsta") {
-  div.classList.add("extended");
-}
-if (player["Statusas"] === "Pasirašė") {
-  div.classList.add("signed");
-}
+        if (status === "Išnuomotas") div.classList.add("loan");
+        if (status === "Paliko") div.classList.add("left");
+        if (status === "Pratęsta") div.classList.add("extended");
+        if (status === "Pasirašė") div.classList.add("signed");
 
+        // HTML
         div.innerHTML = `
-          <div><b>${player["Pozicija"]}</b></div>
-          <div>${player["Žaidėjas"]}</div>
-          <div class="${statusClass}">${player["Statusas"]}</div>
+          <div><b>${player["Pozicija"] || ""}</b></div>
+          <div>${player["Žaidėjas"] || ""}</div>
+          <div>${player["Statusas"] || ""}</div>
           <div>${player["Iki"] || ""}</div>
         `;
 
