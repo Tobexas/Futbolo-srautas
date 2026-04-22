@@ -17,6 +17,28 @@
       padding: 20px 0;
     }
 
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      max-width: 180px;
+      height: auto;
+    }
+
+    .instagram img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .instagram img:hover {
+      opacity: 0.7;
+    }
+
     h1 {
       text-align: center;
     }
@@ -47,64 +69,51 @@
       }
     }
 
-    /* Pozicija */
     .trn {
       background-color: #fff9c4;
-       border-top: 2px solid #999;
-  border-bottom: 2px solid #999;
-  margin: 8px 0;
-  padding: 8px 0;
+      border-top: 2px solid #999;
+      border-bottom: 2px solid #999;
+      margin: 8px 0;
+      padding: 8px 0;
     }
 
-    /* Statusai */
-    .loan {
-      background-color: #f2f2f2;
-    }
+    .loan { background-color: #f2f2f2; }
+    .left { background-color: #ffe5e5; }
+    .extended { background-color: #fff9c4; }
+    .signed { background-color: #e6ffe6; }
 
-    .left {
-      background-color: #ffe5e5;
-    }
-
-    .extended {
-      background-color: #fff9c4;
-    }
-
-    .signed {
-      background-color: #e6ffe6;
-    }
-
-    /* Hover */
     .player:hover {
       filter: brightness(0.98);
     }
-    .header-row {
-  display: grid;
-  grid-template-columns: 60px 1fr 120px 80px;
-  gap: 10px;
-  font-weight: bold;
-  border-bottom: 2px solid #000;
-  padding: 6px 0;
-  margin-bottom: 5px;
-}
-.logo {
-  text-align: center;
-  margin-bottom: 10px;
-}
 
-.logo img {
-  max-width: 360px;
-  height: auto;
-}
+    .header-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 120px 80px;
+      gap: 10px;
+      font-weight: bold;
+      border-bottom: 2px solid #000;
+      padding: 6px 0;
+      margin-bottom: 5px;
+    }
+
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="logo">
-  <img src="https://iili.io/BOA1EmB.jpg" alt="Futbolo srautas logo">
-</div>
+
+  <!-- NAUJAS HEADER -->
+  <div class="header">
+    <img src="https://iili.io/BOA1EmB.jpg" class="logo">
+
+    <a href="https://instagram.com/futbolo_srautas" target="_blank" class="instagram">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+    </a>
+  </div>
+
   <h1>TopLygos komandų turgus</h1>
   <div id="content"></div>
+
 </div>
 
 <script>
@@ -118,7 +127,6 @@ fetch(url)
     let content = document.getElementById("content");
     let teams = {};
 
-    // Grupavimas pagal komandą
     data.forEach(row => {
       let team = row["Komanda"];
 
@@ -129,7 +137,6 @@ fetch(url)
       teams[team].push(row);
     });
 
-    // Renderinimas
     for (let team in teams) {
       let teamDiv = document.createElement("div");
       teamDiv.className = "team";
@@ -138,58 +145,56 @@ fetch(url)
       title.innerText = team;
 
       teamDiv.appendChild(title);
+
       let header = document.createElement("div");
-header.className = "header-row";
+      header.className = "header-row";
 
-header.innerHTML = `
-  <div>Poz</div>
-  <div>Žaidėjas</div>
-  <div>Statusas</div>
-  <div>Iki</div>
-`;
+      header.innerHTML = `
+        <div>Poz</div>
+        <div>Žaidėjas</div>
+        <div>Statusas</div>
+        <div>Iki</div>
+      `;
 
-teamDiv.appendChild(header);
-  
+      teamDiv.appendChild(header);
+
       teams[team].sort((a, b) => {
 
-  let posA = (a["Pozicija"] || "").trim();
-  let posB = (b["Pozicija"] || "").trim();
+        let posA = (a["Pozicija"] || "").trim();
+        let posB = (b["Pozicija"] || "").trim();
 
-  let statusA = (a["Statusas"] || "").trim();
-  let statusB = (b["Statusas"] || "").trim();
+        let statusA = (a["Statusas"] || "").trim();
+        let statusB = (b["Statusas"] || "").trim();
 
-  // STATUSO PRIORITETAS (didžiausias svoris)
-  const statusOrder = {
-    "Paliko": 100,
-    "Išnuomotas": 90
-  };
+        const statusOrder = {
+          "Paliko": 100,
+          "Išnuomotas": 90
+        };
 
-  let statusDiff = (statusOrder[statusA] || 0) - (statusOrder[statusB] || 0);
-  if (statusDiff !== 0) return statusDiff;
+        let statusDiff = (statusOrder[statusA] || 0) - (statusOrder[statusB] || 0);
+        if (statusDiff !== 0) return statusDiff;
 
-  // POZICIJOS LOGIKA
-  function getPosOrder(pos) {
-    if (pos === "GK") return 1;
-    if (pos.startsWith("D")) return 2;
-    if (pos.startsWith("M")) return 3;
-    if (pos.startsWith("A")) return 4;
-    if (pos === "ST") return 5;
-    if (pos === "Trn") return 6;
-    return 99;
-  }
+        function getPosOrder(pos) {
+          if (pos === "GK") return 1;
+          if (pos.startsWith("D")) return 2;
+          if (pos.startsWith("M")) return 3;
+          if (pos.startsWith("A")) return 4;
+          if (pos === "ST") return 5;
+          if (pos === "Trn") return 6;
+          return 99;
+        }
 
-  return getPosOrder(posA) - getPosOrder(posB);
-});
+        return getPosOrder(posA) - getPosOrder(posB);
+      });
+
       teams[team].forEach(player => {
         let div = document.createElement("div");
         div.className = "player";
 
-        // Pozicija (Trn)
         if (player["Pozicija"]?.trim() === "Trn") {
           div.classList.add("trn");
         }
 
-        // Statusas
         let status = player["Statusas"]?.trim();
 
         if (status === "Išnuomotas") div.classList.add("loan");
@@ -197,7 +202,6 @@ teamDiv.appendChild(header);
         if (status === "Pratęsta") div.classList.add("extended");
         if (status === "Pasirašė") div.classList.add("signed");
 
-        // HTML
         div.innerHTML = `
           <div><b>${player["Pozicija"] || ""}</b></div>
           <div>${player["Žaidėjas"] || ""}</div>
