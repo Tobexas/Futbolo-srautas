@@ -137,6 +137,19 @@ fetch(url)
 
     let content = document.getElementById("content");
     let teams = {};
+    
+const teamOrder = {
+  "FK KAUNO ŽALGIRIS": 1,
+  "FK SŪDUVA": 2,
+  "FK ŽALGIRIS": 3,
+  "FK TRANSINVEST": 4,
+  "FK BANGA": 5,
+  "FC DŽIUGAS": 6,
+  "FK PANEVĖŽYS": 7,
+  "FC HEGELMANN": 8,
+  "FA ŠIAULIAI": 9,
+  "FK MINIJA": 10
+};
 
     data.forEach(row => {
       let team = row["Komanda"];
@@ -148,7 +161,11 @@ fetch(url)
       teams[team].push(row);
     });
 
-    for (let team in teams) {
+   const sortedTeams = Object.keys(teams).sort((a, b) => {
+  return (teamOrder[a] ?? 999) - (teamOrder[b] ?? 999);
+});
+
+for (let team of sortedTeams) {
       let teamDiv = document.createElement("div");
       teamDiv.className = "team";
 
