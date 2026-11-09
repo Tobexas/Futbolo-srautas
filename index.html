@@ -1,15 +1,15 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P01LD25HML"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-
-gtag('config', 'G-P01LD25HML');
-</script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P01LD25HML');
+  </script>
 
   <title>Futbolo srautas</title>
 
@@ -53,28 +53,63 @@ gtag('config', 'G-P01LD25HML');
     }
 
     .team {
-      margin-bottom: 40px;
+      margin-bottom: 15px;
     }
 
-   .team h2 {
-  background: linear-gradient(90deg, #111, #333);
-  color: white;
-  padding: 12px;
-  border-radius: 6px;
-  letter-spacing: 1px;
-}
+    /* KOMANDOS MYGTUKAS */
+    .team h2 {
+      background: linear-gradient(90deg, #111, #333);
+      color: white;
+      padding: 12px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0;
+      user-select: none;
+    }
+
+    .team h2:hover {
+      background: linear-gradient(90deg, #292929, #444);
+    }
+
+    .team-arrow {
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .team.open .team-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* KOMANDOS TURINYS */
+    .team-content {
+      display: none;
+      padding-top: 8px;
+    }
+
+    .team.open .team-content {
+      display: block;
+    }
 
     .player {
-  display: grid;
-  grid-template-columns: 60px 1fr 120px 80px;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid #ddd;
-  align-items: center;
-}
+      display: grid;
+      grid-template-columns: 60px 1fr 120px 80px;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #ddd;
+      align-items: center;
+    }
 
     @media (max-width: 600px) {
       .player {
+        grid-template-columns: 40px 1fr;
+        gap: 5px;
+      }
+
+      .header-row {
         grid-template-columns: 40px 1fr;
         gap: 5px;
       }
@@ -109,11 +144,11 @@ gtag('config', 'G-P01LD25HML');
 
   </style>
 </head>
+
 <body>
 
 <div class="container">
 
-  <!-- NAUJAS HEADER -->
   <div class="header">
     <img src="https://iili.io/BOA1EmB.jpg" class="logo">
 
@@ -137,19 +172,19 @@ fetch(url)
 
     let content = document.getElementById("content");
     let teams = {};
-    
-const teamOrder = {
-  "FK KAUNO ŽALGIRIS": 1,
-  "FK SŪDUVA": 2,
-  "FK ŽALGIRIS": 3,
-  "FK TRANSINVEST": 4,
-  "FK BANGA": 5,
-  "FC DŽIUGAS": 6,
-  "FK PANEVĖŽYS": 7,
-  "FC HEGELMANN": 8,
-  "FA ŠIAULIAI": 9,
-  "FK MINIJA": 10
-};
+
+    const teamOrder = {
+      "FK KAUNO ŽALGIRIS": 1,
+      "FK SŪDUVA": 2,
+      "FK ŽALGIRIS": 3,
+      "FK TRANSINVEST": 4,
+      "FK BANGA": 5,
+      "FC DŽIUGAS": 6,
+      "FK PANEVĖŽYS": 7,
+      "FC HEGELMANN": 8,
+      "FA ŠIAULIAI": 9,
+      "FK MINIJA": 10
+    };
 
     data.forEach(row => {
       let team = row["Komanda"];
@@ -161,19 +196,35 @@ const teamOrder = {
       teams[team].push(row);
     });
 
-   const sortedTeams = Object.keys(teams).sort((a, b) => {
-  return (teamOrder[a] ?? 999) - (teamOrder[b] ?? 999);
-});
+    const sortedTeams = Object.keys(teams).sort((a, b) => {
+      return (teamOrder[a] ?? 999) - (teamOrder[b] ?? 999);
+    });
 
-for (let team of sortedTeams) {
+    for (let team of sortedTeams) {
+
       let teamDiv = document.createElement("div");
       teamDiv.className = "team";
 
+      /* KOMANDOS PAVADINIMAS */
       let title = document.createElement("h2");
-      title.innerText = team;
+      title.innerHTML = `
+        <span>${team}</span>
+        <span class="team-arrow">⌄</span>
+      `;
+
+      /* KOMANDOS TURINIO BLOKAS */
+      let teamContent = document.createElement("div");
+      teamContent.className = "team-content";
+
+      /* PASPAUDUS IŠSKLEIDŽIAMA ARBA SUSKLEIDŽIAMA */
+      title.addEventListener("click", () => {
+        teamDiv.classList.toggle("open");
+      });
 
       teamDiv.appendChild(title);
+      teamDiv.appendChild(teamContent);
 
+      /* LENTELĖS ANTRAŠTĖ */
       let header = document.createElement("div");
       header.className = "header-row";
 
@@ -184,8 +235,9 @@ for (let team of sortedTeams) {
         <div>Iki</div>
       `;
 
-      teamDiv.appendChild(header);
+      teamContent.appendChild(header);
 
+      /* ŽAIDĖJŲ RŪŠIAVIMAS */
       teams[team].sort((a, b) => {
 
         let posA = (a["Pozicija"] || "").trim();
@@ -215,7 +267,9 @@ for (let team of sortedTeams) {
         return getPosOrder(posA) - getPosOrder(posB);
       });
 
+      /* ŽAIDĖJŲ ATVAIZDAVIMAS */
       teams[team].forEach(player => {
+
         let div = document.createElement("div");
         div.className = "player";
 
@@ -237,12 +291,17 @@ for (let team of sortedTeams) {
           <div>${player["Iki"] || ""}</div>
         `;
 
-        teamDiv.appendChild(div);
+        teamContent.appendChild(div);
       });
 
       content.appendChild(teamDiv);
     }
 
+  })
+  .catch(error => {
+    console.error("Nepavyko įkelti komandų duomenų:", error);
+    document.getElementById("content").innerText =
+      "Nepavyko įkelti komandų duomenų. Bandykite atnaujinti puslapį.";
   });
 </script>
 
